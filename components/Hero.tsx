@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import Button from "./Button";
 import { TiLocationArrow } from "react-icons/ti";
+import { useGSAP } from "@gsap/react";
 
 const Hero = () => {
   const [currentIndex, setCurrentIndex] = useState(1);
@@ -18,6 +19,10 @@ const Hero = () => {
     setHasClicked(true);
     setCurrentIndex(upcomingVideoIndex);
   };
+
+  useGSAP(() => {
+    
+  })
 
   const getVideoSource = (index: number) => `videos/hero-${index}.mp4`;
 
