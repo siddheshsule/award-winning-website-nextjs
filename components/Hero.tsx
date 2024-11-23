@@ -151,7 +151,7 @@ const Hero = () => {
             <h1 className="special-font hero-heading text-blue-100">
               redefi<b>n</b>e
             </h1>
-            <p className="mb-5 max-w-64 font-robert-regular text-blue-100">
+            <p className="mb-5 max-w-64 font-circular-web text-blue-100">
               Enter the Metagame layer <br />
               Unleash the Play Economy
             </p>
