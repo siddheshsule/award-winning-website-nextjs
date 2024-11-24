@@ -1,13 +1,61 @@
 "use client";
 
-import React, { useRef } from "react";
-import Button from "./Button";
+import clsx from "clsx";
+import gsap from "gsap";
+import { useWindowScroll } from "react-use";
+import { useEffect, useRef, useState } from "react";
 import { TiLocationArrow } from "react-icons/ti";
 
-const navItems = ["Nexus", "Vault", "Prologue", "About","Contact"];
+import Button from "./Button";
+
+const navItems = ["Nexus", "Vault", "Prologue", "About", "Contact"];
 
 const Navbar = () => {
+  const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+  const [isIndicatorActive, setIsIndicatorActive] = useState(false);
+
   const navContainerRef = useRef<HTMLDivElement | null>(null);
+  const audioElementRef = useRef<HTMLAudioElement | null>(null);
+
+  const { y: currentScrollY } = useWindowScroll();
+  const [isNavVisible, setIsNavVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  const toggleAudioIndicator = () => {
+    setIsAudioPlaying((prev) => !prev);
+    setIsIndicatorActive((prev) => !prev);
+  };
+
+  useEffect(() => {
+    if (isAudioPlaying) {
+      audioElementRef.current?.play();
+    } else {
+      audioElementRef.current?.pause();
+    }
+  }, [isAudioPlaying]);
+
+  useEffect(() => {
+    if (currentScrollY === 0) {
+      setIsNavVisible(true);
+      navContainerRef.current?.classList.remove("floating-nav");
+    } else if (currentScrollY > lastScrollY) {
+      setIsNavVisible(false);
+      navContainerRef.current?.classList.add("floating-nav");
+    } else if (currentScrollY < lastScrollY) {
+      setIsNavVisible(true);
+      navContainerRef.current?.classList.add("floating-nav");
+    }
+
+    setLastScrollY(currentScrollY);
+  }, [currentScrollY, lastScrollY]);
+
+  useEffect(() => {
+    gsap.to(navContainerRef.current, {
+      y: isNavVisible ? 0 : -100,
+      opacity: isNavVisible ? 1 : 0,
+      duration: 0.5,
+    });
+  });
 
   return (
     <div
@@ -30,15 +78,42 @@ const Navbar = () => {
           </div>
           {/* Navigation links and audio buttons */}
 
-          <div className="flex h-full">
+          <div className="flex h-full items-center">
             <div className="hidden md:block">
-                {navItems.map((item) => (
-                    <a href={`#${item.toLowerCase()}`}>
-                        {item}
-                    </a>
-                ))}
-
+              {navItems.map((item, index) => (
+                <a
+                  key={index}
+                  href={`#${item.toLowerCase()}`}
+                  className="nav-hover-btn"
+                >
+                  {item}
+                </a>
+              ))}
             </div>
+
+            <button
+              onClick={toggleAudioIndicator}
+              className="ml-10 flex items-center space-x-0.5"
+            >
+              <audio
+                src="/audio/loop.mp3"
+                ref={audioElementRef}
+                className="hidden"
+                loop
+              />
+
+              {[1, 2, 3, 4].map((bar) => (
+                <div
+                  key={bar}
+                  className={clsx("indicator-line", {
+                    active: isIndicatorActive,
+                  })}
+                  style={{
+                    animationDelay: `${bar * 0.1}s`,
+                  }}
+                ></div>
+              ))}
+            </button>
           </div>
         </nav>
       </header>
