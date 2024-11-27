@@ -5,7 +5,7 @@ import Button from "./Button";
 import { TiLocationArrow } from "react-icons/ti";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import {ScrollTrigger} from "gsap/all";
+import { ScrollTrigger } from "gsap/all";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -66,30 +66,29 @@ const Hero = () => {
     { dependencies: [currentIndex], revertOnUpdate: true }
   );
 
-  useGSAP(()=>{
-    gsap.set('#video-frame', {clipPath: 'polygon(14% 0%, 72% 0%, 90% 90%, 0% 100%)', borderRadius: '0% 0% 40% 10%'});
+  useGSAP(() => {
+    gsap.set("#video-frame", {
+      clipPath: "polygon(14% 0%, 72% 0%, 90% 90%, 0% 100%)",
+      borderRadius: "0% 0% 40% 10%",
+    });
 
-    gsap.from('#video-frame', {clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)', borderRadius: '0% 0% 0% 0%',ease:'power1.inOut', scrollTrigger: {
-      trigger: '#video-frame',
-      start: 'center center',
-      end: 'bottom center',
-      scrub: true,
-    }});
-
-
+    gsap.from("#video-frame", {
+      clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+      borderRadius: "0% 0% 0% 0%",
+      ease: "power1.inOut",
+      scrollTrigger: {
+        trigger: "#video-frame",
+        start: "center center",
+        end: "bottom center",
+        scrub: true,
+      },
+    });
   });
-
-
-
 
   const getVideoSource = (index: number) => `videos/hero-${index}.mp4`;
 
-
-
-
   return (
     <div className="relative h-dvh w-screen overflow-x-hidden">
-
       {isLoading && (
         <div className="flex-center absolute z-[100] h-dvh w-screen overflow-hidden bg-hidden-50">
           <div className="three-body">
@@ -135,7 +134,7 @@ const Hero = () => {
             src={getVideoSource(
               currentIndex === totalVideos - 1 ? 1 : currentIndex
             )}
-            // autoPlay
+            autoPlay
             loop
             muted
             className="absolute left-0 top-0 size-full object-cover object-center"
